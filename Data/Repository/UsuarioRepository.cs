@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data.Repository
@@ -17,14 +18,19 @@ namespace Data.Repository
             _context = context;
         }
 
-        public IEnumerable<Usuario> BuscaProdutoId(int id)
+        public Usuario BuscaUsuarioId(int id)
         {
-            throw new NotImplementedException();
+            return _context.UsuarioAPI.Find(id);
         }
-        public IEnumerable<Usuario> BuscaProdutoAll()
+        public IEnumerable<Usuario> BuscaUsuarioAll()
         {
-            var busca = _context.UsuarioAPI.ToList();
-            return busca;
+            return _context.UsuarioAPI.ToList();
+        }
+
+        public void Excluirusuario(Usuario usuario) 
+        {
+            _context.UsuarioAPI.Remove(usuario);
+            _context.SaveChanges();
         }
     }
 }

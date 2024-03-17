@@ -9,7 +9,8 @@ namespace Domain.Interfaces
 {
     public interface IUsuarioRepository
     {
-        IEnumerable<Usuario> BuscaProdutoId(int id);
-        IEnumerable<Usuario> BuscaProdutoAll();
+        Usuario BuscaUsuarioId(int id);
+        IEnumerable<Usuario> BuscaUsuarioAll();
+        void Excluirusuario(Usuario DadosUsuario);
     }
 }

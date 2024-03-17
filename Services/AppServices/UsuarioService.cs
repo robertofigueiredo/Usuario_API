@@ -1,6 +1,8 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Services.Interfaces;
+using System.Net.Http;
+using Usuario_API.Models;
 
 namespace Services.AppServices
 {
@@ -12,16 +14,50 @@ namespace Services.AppServices
         {
             _usuarioRepository = usuarioRepository;
         }
-        public IEnumerable<Usuario> BuscaProdutoId(int id)
+        public Usuario BuscaUsuarioId(int id)
         {
-            var BuscaRepository = _usuarioRepository.BuscaProdutoId(id);
-            return null;
+            if (id == 0)
+            {
+                return null; 
+            }
+
+            try
+            {
+                return _usuarioRepository.BuscaUsuarioId(id);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao buscar o usuário por ID.", ex);
+            }
         }
 
-        public IEnumerable<Usuario> BuscaProdutoAll()
+        public IEnumerable<Usuario> BuscaUsuarioAll()
         {
-            var BuscaRepository = _usuarioRepository.BuscaProdutoAll().ToList();
-            return BuscaRepository;
+            return _usuarioRepository.BuscaUsuarioAll().ToList();
         }
+
+        public BaseRetorno DeletaUsuario(int id)
+        {
+            var usuario = _usuarioRepository.BuscaUsuarioId(id);
+
+            if (usuario == null)
+            {
+                return new BaseRetorno
+                {
+                    Sucesso = false,
+                    MensagemResponse = "Usuário não encontrado!"
+                };
+            }
+
+            _usuarioRepository.Excluirusuario(usuario);
+
+            return new BaseRetorno
+            {
+                Sucesso = true,
+                MensagemResponse = "Usuário excluído com sucesso"
+            };
+        }
+
     }
 }

@@ -14,24 +14,53 @@ namespace Usuario_API.Controllers
             _usuarioService = usuarioService;
         }
 
-        [HttpGet("BuscaProdutoId/{id:int}")]
+        [HttpGet("BuscausuarioId/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Usuario>> BuscaProdutoId(int id)
+        public ActionResult<Usuario> BuscausuarioId(int id)
         {
-            var BuscaId = _usuarioService.BuscaProdutoId(id).ToList();
+            try
+            {
+                var usuario = _usuarioService.BuscaUsuarioId(id);
+
+                if (usuario is null)
+                {
+                    return NotFound("Usuário não encontrado");
+                }
+
+                return Ok(usuario);
+            }
+            catch
+            {
+                return StatusCode(500, "Ocorreu um erro ao processar a solicitação.");
+            }
+        }
+
+        [HttpGet("BuscaUsuarioAll")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Usuario>> BuscaUsuarioAll()
+        {
+            var BuscaId = _usuarioService.BuscaUsuarioAll().ToList();
             return Ok(BuscaId);
         }
 
-        [HttpGet("BuscaProdutoAll")]
+        [HttpDelete("DeletaUsuario/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Usuario>> BuscaProdutoAll()
+        public ActionResult DeletaUsuario(int id)
         {
-            var BuscaId = _usuarioService.BuscaProdutoAll().ToList();
-            return Ok(BuscaId);
+            var resultado = _usuarioService.DeletaUsuario(id);
+
+            if (!resultado.Sucesso)
+            {
+                return BadRequest(resultado.MensagemResponse);
+            }
+
+            return NoContent();
         }
     }
 }
