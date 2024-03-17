@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
-    public interface IUsuario
+    public interface IUsuarioServices
     {
         IEnumerable<Usuario> BuscaProdutoId(int id);
         IEnumerable<Usuario> BuscaProdutoAll();

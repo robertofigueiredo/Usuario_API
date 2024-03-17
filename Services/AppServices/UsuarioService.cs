@@ -4,7 +4,7 @@ using Services.Interfaces;
 
 namespace Services.AppServices
 {
-    public class UsuarioService : IUsuario
+    public class UsuarioService : IUsuarioServices
     {
         private readonly IUsuarioRepository _usuarioRepository;
 
@@ -20,7 +20,8 @@ namespace Services.AppServices
 
         public IEnumerable<Usuario> BuscaProdutoAll()
         {
-            throw new NotImplementedException();
+            var BuscaRepository = _usuarioRepository.BuscaProdutoAll().ToList();
+            return BuscaRepository;
         }
     }
 }

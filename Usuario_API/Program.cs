@@ -1,5 +1,9 @@
 using Data.Context;
+using Data.Repository;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Services.AppServices;
+using Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +22,8 @@ builder.Services.AddCors(options =>
                 );
 });
 
+builder.Services.AddScoped<IUsuarioServices,UsuarioService>();
+builder.Services.AddScoped<IUsuarioRepository,UsuarioRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

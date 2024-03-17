@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public interface IUsuarioRepository
     {
         IEnumerable<Usuario> BuscaProdutoId(int id);
+        IEnumerable<Usuario> BuscaProdutoAll();
     }
 }

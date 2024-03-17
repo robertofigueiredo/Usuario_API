@@ -8,10 +8,10 @@ namespace Usuario_API.Controllers
     [Route("api/v1/usuario")]
     public class UsuarioController : ControllerBase
     {
-        private readonly IUsuario _UsuarioService;
-        public UsuarioController(IUsuario UsuarioService)
+        private readonly IUsuarioServices _usuarioService;
+        public UsuarioController(IUsuarioServices usuarioService)
         {
-            _UsuarioService = UsuarioService;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet("BuscaProdutoId/{id:int}")]
@@ -20,7 +20,7 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<IEnumerable<Usuario>> BuscaProdutoId(int id)
         {
-            var BuscaId = _UsuarioService.BuscaProdutoId(id).ToList();
+            var BuscaId = _usuarioService.BuscaProdutoId(id).ToList();
             return Ok(BuscaId);
         }
 
@@ -28,9 +28,9 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Usuario>> BuscaProdutoAll(int id)
+        public ActionResult<IEnumerable<Usuario>> BuscaProdutoAll()
         {
-            var BuscaId = _UsuarioService.BuscaProdutoAll().ToList();
+            var BuscaId = _usuarioService.BuscaProdutoAll().ToList();
             return Ok(BuscaId);
         }
     }
