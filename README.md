@@ -23,4 +23,4 @@ Execute o projeto e comece a usar :).
 - `.NET`
 - `C#`
 - `SQLServer`
-- `Entity Framework`
+- `ORM - Entity Framework`
