@@ -2,7 +2,7 @@
 
 namespace Usuario_API.Models
 {
-    public class UsuarioAPI
+    public class UsuarioAPIViewModel
     {
  
         [Required(ErrorMessage = "Inclua o Id do Usuário")]

@@ -38,12 +38,22 @@ namespace Services.AppServices
             return _usuarioRepository.BuscaUsuarioAll().ToList();
         }
 
-        public BaseRetorno IncluirUsuario(Usuario usuario)
+        public BaseRetorno IncluirUsuario(UsuarioAPIViewModel DadosAPI)
         {
             var RetornoService = new BaseRetorno();
             try
             {
-                var VerificaExistenciaUsuario = _usuarioRepository.BuscaUsuarioId(usuario.Id);
+                var NovoUsuario = new Usuario
+                {
+                    Id = DadosAPI.Id,
+                    Nome = DadosAPI.Nome,
+                    Sobrenome = DadosAPI.Sobrenome,
+                    Ativo = DadosAPI.Ativo,
+                    DataDeAlteracao = DateTime.UtcNow,
+                    DataDeCriacao = DateTime.UtcNow
+                };
+
+                var VerificaExistenciaUsuario = _usuarioRepository.BuscaUsuarioId(DadosAPI.Id);
                 if(VerificaExistenciaUsuario != null)
                 {
                     RetornoService.Validacao = false;
@@ -51,7 +61,7 @@ namespace Services.AppServices
                     return RetornoService;
                 }
 
-                var InclusaoService = _usuarioRepository.IncluirUsuario(usuario);
+                var InclusaoService = _usuarioRepository.IncluirUsuario(NovoUsuario);
                 RetornoService.MensagemResponse = "Usuário incluido com sucesso";
                 RetornoService.Validacao = true;
             }

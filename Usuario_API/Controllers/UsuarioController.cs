@@ -15,11 +15,11 @@ namespace Usuario_API.Controllers
             _usuarioService = usuarioService;
         }
 
-        [HttpGet("BuscausuarioId/{id:int}")]
+        [HttpGet("BuscaUsuarioId/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UsuarioAPI> BuscausuarioId(int id)
+        public ActionResult<UsuarioAPIViewModel> BuscaUsuarioId(int id)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<UsuarioAPI>> BuscaTodosUsuario()
+        public ActionResult<IEnumerable<UsuarioAPIViewModel>> BuscaTodosUsuario()
         {
             var BuscaId = _usuarioService.BuscaUsuarioAll().ToList();
             return Ok(BuscaId);
@@ -52,32 +52,12 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UsuarioAPI> IncluirUsuario([FromBody] UsuarioAPI DadosAPI)
+        public ActionResult<UsuarioAPIViewModel> IncluirUsuario([FromBody] UsuarioAPIViewModel DadosAPI)
         {
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(new ValidationProblemDetails
-                {
-                    Title = "Ocorreu um erro durante sua solicitação",
-                    Detail = "Os parâmetros fornecidos são inválidos",
-                    Instance = HttpContext.Request.Path,
-                    Status = StatusCodes.Status400BadRequest,
-                });
-            }
-
-            var usuario = new Usuario
-            {
-                Id = DadosAPI.Id,
-                Nome = DadosAPI.Nome,
-                Sobrenome = DadosAPI.Sobrenome,
-                Ativo = DadosAPI.Ativo,
-                DataDeAlteracao = DateTime.UtcNow,
-                DataDeCriacao = DateTime.UtcNow
-            };
-
+           
             try
             {
-                var retornoInclusao = _usuarioService.IncluirUsuario(usuario);
+                var retornoInclusao = _usuarioService.IncluirUsuario(DadosAPI);
                 if (!retornoInclusao.Validacao)
                 {
                     return BadRequest(retornoInclusao.MensagemResponse);
