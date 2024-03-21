@@ -52,6 +52,7 @@ namespace Services.AppServices
                 }
 
                 var InclusaoService = _usuarioRepository.IncluirUsuario(usuario);
+                RetornoService.MensagemResponse = "Usuário incluido com sucesso";
                 RetornoService.Validacao = true;
             }
             catch(Exception ex)

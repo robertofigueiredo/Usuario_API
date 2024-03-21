@@ -77,7 +77,7 @@ namespace Usuario_API.Controllers
             {
                 return BadRequest(RetornoInclusao.MensagemResponse);
             }
-            return StatusCode(201, "Usuário incluido com sucesso");
+            return StatusCode(201, RetornoInclusao.MensagemResponse);
         }
 
         [HttpDelete("DeletaUsuario/{id:int}")]
