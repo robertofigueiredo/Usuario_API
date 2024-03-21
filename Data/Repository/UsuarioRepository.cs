@@ -1,12 +1,14 @@
 ﻿using Data.Context;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Usuario_API.Models;
 
 namespace Data.Repository
 {
@@ -32,5 +34,31 @@ namespace Data.Repository
             _context.UsuarioAPI.Remove(usuario);
             _context.SaveChanges();
         }
+
+        public BaseRetorno IncluirUsuario(Usuario usuario)
+        {
+            var retorno = new BaseRetorno();
+            try
+            {
+                _context.UsuarioAPI.Add(usuario);
+                _context.SaveChanges();
+
+                retorno.Validacao = true;
+                retorno.MensagemResponse = "Usuário incluído com sucesso.";
+            }
+            catch (DbUpdateException ex)
+            {
+                retorno.Validacao = false;
+                retorno.MensagemResponse = "Erro ao inserir usuário: " + ex.Message;
+            }
+            catch (Exception ex)
+            {
+                retorno.Validacao = false;
+                retorno.MensagemResponse = "Erro desconhecido ao inserir usuário: " + ex.Message;
+            }
+
+            return retorno;
+        }
+
     }
 }

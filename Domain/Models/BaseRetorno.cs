@@ -2,7 +2,7 @@
 {
     public class BaseRetorno
     {
-        public bool Sucesso { get; set; }
+        public bool Validacao { get; set; }
         public string MensagemResponse { get; set; }
 
     }

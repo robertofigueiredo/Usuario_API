@@ -11,7 +11,11 @@ builder.Services.AddDbContext<UsuarioContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Development", builder =>
@@ -22,8 +26,8 @@ builder.Services.AddCors(options =>
                 );
 });
 
-builder.Services.AddScoped<IUsuarioServices,UsuarioService>();
-builder.Services.AddScoped<IUsuarioRepository,UsuarioRepository>();
+builder.Services.AddScoped<IUsuarioServices, UsuarioService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

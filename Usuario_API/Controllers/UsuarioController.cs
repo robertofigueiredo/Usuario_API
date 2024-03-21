@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Usuario_API.Models;
 
@@ -18,7 +19,7 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Usuario> BuscausuarioId(int id)
+        public ActionResult<UsuarioAPI> BuscausuarioId(int id)
         {
             try
             {
@@ -37,14 +38,46 @@ namespace Usuario_API.Controllers
             }
         }
 
-        [HttpGet("BuscaUsuarioAll")]
+        [HttpGet("BuscaTodosUsuario")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<Usuario>> BuscaUsuarioAll()
+        public ActionResult<IEnumerable<UsuarioAPI>> BuscaTodosUsuario()
         {
             var BuscaId = _usuarioService.BuscaUsuarioAll().ToList();
             return Ok(BuscaId);
+        }
+
+        [HttpPost("IncluirUsuario")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<UsuarioAPI> IncluirUsuario([FromBody] UsuarioAPI DadosAPI)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                {
+                    Title = "Ocorreu um erro durante sua solicitação",
+                    Detail = "Os Parametros fornecidos são invalidos"
+                });
+            }
+
+            var UsuarioService = new Usuario
+            {
+                Id = DadosAPI.Id,
+                Nome = DadosAPI.Nome, 
+                Sobrenome = DadosAPI.Sobrenome,
+                Ativo = DadosAPI.Ativo,
+                DataDeAlteracao = DateTime.Now,
+                DataDeCriacao = DateTime.Now,   
+            };
+            var RetornoInclusao = _usuarioService.IncluirUsuario(UsuarioService);
+            if (!RetornoInclusao.Validacao)
+            {
+                return BadRequest(RetornoInclusao.MensagemResponse);
+            }
+            return StatusCode(201, "Usuário incluido com sucesso");
         }
 
         [HttpDelete("DeletaUsuario/{id:int}")]
@@ -55,7 +88,7 @@ namespace Usuario_API.Controllers
         {
             var resultado = _usuarioService.DeletaUsuario(id);
 
-            if (!resultado.Sucesso)
+            if (!resultado.Validacao)
             {
                 return BadRequest(resultado.MensagemResponse);
             }

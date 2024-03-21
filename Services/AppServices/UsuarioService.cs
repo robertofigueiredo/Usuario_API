@@ -2,6 +2,7 @@
 using Domain.Models;
 using Services.Interfaces;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Usuario_API.Models;
 
 namespace Services.AppServices
@@ -37,6 +38,31 @@ namespace Services.AppServices
             return _usuarioRepository.BuscaUsuarioAll().ToList();
         }
 
+        public BaseRetorno IncluirUsuario(Usuario usuario)
+        {
+            var RetornoService = new BaseRetorno();
+            try
+            {
+                var VerificaExistenciaUsuario = _usuarioRepository.BuscaUsuarioId(usuario.Id);
+                if(VerificaExistenciaUsuario != null)
+                {
+                    RetornoService.Validacao = false;
+                    RetornoService.MensagemResponse = "Já existe um usuário cadastro com o mesmo ID";
+                    return RetornoService;
+                }
+
+                var InclusaoService = _usuarioRepository.IncluirUsuario(usuario);
+                RetornoService.Validacao = true;
+            }
+            catch(Exception ex)
+            {
+                RetornoService.Validacao = false;
+                RetornoService.MensagemResponse = ex.Message;
+                throw ex;
+            }
+            return RetornoService;
+        }
+
         public BaseRetorno DeletaUsuario(int id)
         {
             var usuario = _usuarioRepository.BuscaUsuarioId(id);
@@ -45,7 +71,7 @@ namespace Services.AppServices
             {
                 return new BaseRetorno
                 {
-                    Sucesso = false,
+                    Validacao = false,
                     MensagemResponse = "Usuário não encontrado!"
                 };
             }
@@ -54,7 +80,7 @@ namespace Services.AppServices
 
             return new BaseRetorno
             {
-                Sucesso = true,
+                Validacao = true,
                 MensagemResponse = "Usuário excluído com sucesso"
             };
         }

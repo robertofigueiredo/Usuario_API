@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Usuario_API.Models;
 
 namespace Domain.Interfaces
 {
@@ -12,5 +13,6 @@ namespace Domain.Interfaces
         Usuario BuscaUsuarioId(int id);
         IEnumerable<Usuario> BuscaUsuarioAll();
         void Excluirusuario(Usuario DadosUsuario);
+        BaseRetorno IncluirUsuario(Usuario usuario);
     }
 }
