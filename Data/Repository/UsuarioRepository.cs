@@ -29,7 +29,7 @@ namespace Data.Repository
             return _context.UsuarioAPI.ToList();
         }
 
-        public void Excluirusuario(Usuario usuario) 
+        public void Excluirusuario(Usuario usuario)
         {
             _context.UsuarioAPI.Remove(usuario);
             _context.SaveChanges();
@@ -57,6 +57,24 @@ namespace Data.Repository
                 retorno.MensagemResponse = "Erro desconhecido ao inserir usuário: " + ex.Message;
             }
 
+            return retorno;
+        }
+
+        public BaseRetorno AtualizarUsuario(Usuario usuario)
+        {
+            var retorno = new BaseRetorno();
+            try
+            {
+                _context.UsuarioAPI.Update(usuario);
+                _context.SaveChanges();
+                retorno.Validacao = true;
+
+            }
+            catch (Exception ex)
+            {
+                retorno.Validacao = false;
+                retorno.MensagemResponse = ex.Message;
+            }
             return retorno;
         }
 

@@ -14,5 +14,6 @@ namespace Domain.Interfaces
         IEnumerable<Usuario> BuscaUsuarioAll();
         void Excluirusuario(Usuario DadosUsuario);
         BaseRetorno IncluirUsuario(Usuario usuario);
+        BaseRetorno AtualizarUsuario(Usuario usuario);
     }
 }

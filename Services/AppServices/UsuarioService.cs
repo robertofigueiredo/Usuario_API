@@ -108,5 +108,43 @@ namespace Services.AppServices
             
         }
 
+        public BaseRetorno AtualizaUsuario(UsuarioAPIViewModel usuario)
+        {
+            BaseRetorno retorno = new BaseRetorno();
+            try
+            {
+                var VerificaExiste = _usuarioRepository.BuscaUsuarioId(usuario.Id);
+                if(VerificaExiste == null)
+                {
+                    retorno.Validacao = false;
+                    retorno.MensagemResponse = "Usuário não encontrado";
+                    return retorno;
+                }
+
+                VerificaExiste.Nome = usuario.Nome;
+                VerificaExiste.Sobrenome = usuario.Sobrenome;
+                VerificaExiste.Ativo = usuario.Ativo;
+                VerificaExiste.DataDeAlteracao = DateTime.UtcNow;
+
+                var UpdateRepository = _usuarioRepository.AtualizarUsuario(VerificaExiste);
+                if (!UpdateRepository.Validacao)
+                {
+                    retorno.MensagemResponse = UpdateRepository.MensagemResponse;
+                    retorno.Validacao = UpdateRepository.Validacao;
+                    return retorno;
+                }
+
+                retorno.MensagemResponse = "Usuário atualizado com sucesso!";
+                retorno.Validacao = true;
+            }
+            catch(Exception ex) 
+            {
+                retorno.Validacao = false;
+                retorno.MensagemResponse = ex.Message;
+            }
+
+            return retorno;
+        }
+
     }
 }

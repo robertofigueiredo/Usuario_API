@@ -9,5 +9,6 @@ namespace Services.Interfaces
         IEnumerable<Usuario> BuscaUsuarioAll();
         BaseRetorno DeletaUsuario(int id);
         BaseRetorno IncluirUsuario(UsuarioAPIViewModel usuario);
+        BaseRetorno AtualizaUsuario(UsuarioAPIViewModel usuario);
     }
 }

@@ -15,11 +15,11 @@ namespace Usuario_API.Controllers
             _usuarioService = usuarioService;
         }
 
-        [HttpGet("BuscaUsuarioId/{id:int}")]
+        [HttpGet("BuscarUsuarioId/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UsuarioAPIViewModel> BuscaUsuarioId(int id)
+        public ActionResult<UsuarioAPIViewModel> BuscarUsuarioId(int id)
         {
             try
             {
@@ -38,11 +38,11 @@ namespace Usuario_API.Controllers
             }
         }
 
-        [HttpGet("BuscaTodosUsuario")]
+        [HttpGet("BuscarTodosUsuario")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<UsuarioAPIViewModel>> BuscaTodosUsuario()
+        public ActionResult<IEnumerable<UsuarioAPIViewModel>> BuscarTodosUsuario()
         {
             var BuscaId = _usuarioService.BuscaUsuarioAll().ToList();
             return Ok(BuscaId);
@@ -71,11 +71,32 @@ namespace Usuario_API.Controllers
             }
         }
 
-        [HttpDelete("DeletaUsuario/{id:int}")]
+        [HttpPut("AtualizarUsuario")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<UsuarioAPIViewModel> AtualizarUsuario([FromBody] UsuarioAPIViewModel usuario)
+        {
+            try
+            {
+                var ResponseServiceUpdate = _usuarioService.AtualizaUsuario(usuario);
+                if (!ResponseServiceUpdate.Validacao)
+                {
+                    return BadRequest(ResponseServiceUpdate.MensagemResponse);
+                }
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("DeletarUsuario/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult DeletaUsuario(int id)
+        public ActionResult DeletarUsuario(int id)
         {
             try
             {
