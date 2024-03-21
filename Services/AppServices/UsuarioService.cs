@@ -35,7 +35,11 @@ namespace Services.AppServices
 
         public IEnumerable<Usuario> BuscaUsuarioAll()
         {
-            return _usuarioRepository.BuscaUsuarioAll().ToList();
+            try
+            {
+                return _usuarioRepository.BuscaUsuarioAll().ToList();
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public BaseRetorno IncluirUsuario(UsuarioAPIViewModel DadosAPI)
@@ -76,24 +80,32 @@ namespace Services.AppServices
 
         public BaseRetorno DeletaUsuario(int id)
         {
-            var usuario = _usuarioRepository.BuscaUsuarioId(id);
-
-            if (usuario == null)
+            try
             {
+                var usuario = _usuarioRepository.BuscaUsuarioId(id);
+
+                if (usuario == null)
+                {
+                    return new BaseRetorno
+                    {
+                        Validacao = false,
+                        MensagemResponse = "Usuário não encontrado!"
+                    };
+                }
+
+                _usuarioRepository.Excluirusuario(usuario);
+
                 return new BaseRetorno
                 {
-                    Validacao = false,
-                    MensagemResponse = "Usuário não encontrado!"
+                    Validacao = true,
+                    MensagemResponse = "Usuário excluído com sucesso"
                 };
             }
-
-            _usuarioRepository.Excluirusuario(usuario);
-
-            return new BaseRetorno
+            catch(Exception ex)
             {
-                Validacao = true,
-                MensagemResponse = "Usuário excluído com sucesso"
-            };
+                throw ex;
+            }
+            
         }
 
     }
