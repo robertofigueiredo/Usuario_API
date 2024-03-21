@@ -56,28 +56,39 @@ namespace Usuario_API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ValidationProblem(new ValidationProblemDetails(ModelState)
+                return ValidationProblem(new ValidationProblemDetails
                 {
                     Title = "Ocorreu um erro durante sua solicitação",
-                    Detail = "Os Parametros fornecidos são invalidos"
+                    Detail = "Os parâmetros fornecidos são inválidos",
+                    Instance = HttpContext.Request.Path,
+                    Status = StatusCodes.Status400BadRequest,
                 });
             }
 
-            var UsuarioService = new Usuario
+            var usuario = new Usuario
             {
                 Id = DadosAPI.Id,
-                Nome = DadosAPI.Nome, 
+                Nome = DadosAPI.Nome,
                 Sobrenome = DadosAPI.Sobrenome,
                 Ativo = DadosAPI.Ativo,
-                DataDeAlteracao = DateTime.Now,
-                DataDeCriacao = DateTime.Now,   
+                DataDeAlteracao = DateTime.UtcNow,
+                DataDeCriacao = DateTime.UtcNow
             };
-            var RetornoInclusao = _usuarioService.IncluirUsuario(UsuarioService);
-            if (!RetornoInclusao.Validacao)
+
+            try
             {
-                return BadRequest(RetornoInclusao.MensagemResponse);
+                var retornoInclusao = _usuarioService.IncluirUsuario(usuario);
+                if (!retornoInclusao.Validacao)
+                {
+                    return BadRequest(retornoInclusao.MensagemResponse);
+                }
+
+                return StatusCode(201, retornoInclusao.MensagemResponse);
             }
-            return StatusCode(201, RetornoInclusao.MensagemResponse);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ocorreu um erro interno no servidor. Erro: {ex.Message}");
+            }
         }
 
         [HttpDelete("DeletaUsuario/{id:int}")]
