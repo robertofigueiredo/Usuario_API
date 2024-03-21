@@ -77,14 +77,21 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult DeletaUsuario(int id)
         {
-            var resultado = _usuarioService.DeletaUsuario(id);
-
-            if (!resultado.Validacao)
+            try
             {
-                return BadRequest(resultado.MensagemResponse);
-            }
+                var resultado = _usuarioService.DeletaUsuario(id);
 
-            return NoContent();
+                if (!resultado.Validacao)
+                {
+                    return BadRequest(resultado.MensagemResponse);
+                }
+
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500,"Ocorreu um erro interno na api");
+            }
         }
     }
 }
