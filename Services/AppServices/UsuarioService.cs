@@ -33,13 +33,26 @@ namespace Services.AppServices
             }
         }
 
-        public IEnumerable<Usuario> BuscaUsuarioAll()
+        public ServiceResponse<List<Usuario>> BuscaUsuarioAll()
         {
+            ServiceResponse<List<Usuario>> serviceResponse = new ServiceResponse<List<Usuario>>();
+
             try
             {
-                return _usuarioRepository.BuscaUsuarioAll().ToList();
+                serviceResponse.Dados = _usuarioRepository.BuscaUsuarioAll().ToList();
+
+                if (serviceResponse.Dados.Count == 0)
+                {
+                    serviceResponse.Mensagem = "Nenhum dado encontrado!";
+                }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) 
+            {
+                serviceResponse.Mensagem = ex.Message;
+                serviceResponse.Sucesso = false;
+            }
+
+            return serviceResponse;
         }
 
         public BaseRetorno IncluirUsuario(UsuarioAPIViewModel DadosAPI)

@@ -15,6 +15,15 @@ namespace Usuario_API.Controllers
             _usuarioService = usuarioService;
         }
 
+        [HttpGet("BuscarTodosUsuario")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<ServiceResponse<IEnumerable<UsuarioAPIViewModel>>> BuscarTodosUsuario()
+        {
+            return Ok(_usuarioService.BuscaUsuarioAll());
+        }
+
         [HttpGet("BuscarUsuarioId/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -38,15 +47,6 @@ namespace Usuario_API.Controllers
             }
         }
 
-        [HttpGet("BuscarTodosUsuario")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<UsuarioAPIViewModel>> BuscarTodosUsuario()
-        {
-            var BuscaId = _usuarioService.BuscaUsuarioAll().ToList();
-            return Ok(BuscaId);
-        }
 
         [HttpPost("IncluirUsuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]

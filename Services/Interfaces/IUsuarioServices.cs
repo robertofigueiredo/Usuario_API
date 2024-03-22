@@ -6,7 +6,7 @@ namespace Services.Interfaces
     public interface IUsuarioServices
     {
         Usuario BuscaUsuarioId(int id);
-        IEnumerable<Usuario> BuscaUsuarioAll();
+        ServiceResponse<List<Usuario>> BuscaUsuarioAll();
         BaseRetorno DeletaUsuario(int id);
         BaseRetorno IncluirUsuario(UsuarioAPIViewModel usuario);
         BaseRetorno AtualizaUsuario(UsuarioAPIViewModel usuario);
