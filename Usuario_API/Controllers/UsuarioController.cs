@@ -6,7 +6,7 @@ using Usuario_API.Models;
 namespace Usuario_API.Controllers
 {
     [ApiController]
-    [Route("api/v1/usuario")]
+    [Route("api/v1/[controller]")]
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioServices _usuarioService;
