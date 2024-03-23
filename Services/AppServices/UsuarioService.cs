@@ -133,7 +133,8 @@ namespace Services.AppServices
                     retorno.MensagemResponse = "Usuário não encontrado";
                     return retorno;
                 }
-
+                VerificaExiste.Turno = usuario.Turno;
+                VerificaExiste.Departamento = usuario.Departamento;
                 VerificaExiste.Nome = usuario.Nome;
                 VerificaExiste.Sobrenome = usuario.Sobrenome;
                 VerificaExiste.Ativo = usuario.Ativo;
