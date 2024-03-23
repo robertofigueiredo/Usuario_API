@@ -66,8 +66,10 @@ namespace Services.AppServices
                     Nome = DadosAPI.Nome,
                     Sobrenome = DadosAPI.Sobrenome,
                     Ativo = DadosAPI.Ativo,
-                    DataDeAlteracao = DateTime.UtcNow,
-                    DataDeCriacao = DateTime.UtcNow
+                    Departamento = DadosAPI.Departamento,
+                    Turno = DadosAPI.Turno,
+                    DataDeAlteracao = DateTime.Now.ToLocalTime(),
+                    DataDeCriacao = DateTime.Now.ToLocalTime()
                 };
 
                 var VerificaExistenciaUsuario = _usuarioRepository.BuscaUsuarioId(DadosAPI.Id);
@@ -138,7 +140,7 @@ namespace Services.AppServices
                 VerificaExiste.Nome = usuario.Nome;
                 VerificaExiste.Sobrenome = usuario.Sobrenome;
                 VerificaExiste.Ativo = usuario.Ativo;
-                VerificaExiste.DataDeAlteracao = DateTime.UtcNow;
+                VerificaExiste.DataDeAlteracao = DateTime.Now.ToLocalTime();
 
                 var UpdateRepository = _usuarioRepository.AtualizarUsuario(VerificaExiste);
                 if (!UpdateRepository.Validacao)
