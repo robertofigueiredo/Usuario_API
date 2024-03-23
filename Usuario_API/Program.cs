@@ -18,12 +18,12 @@ builder.Services.AddControllers()
                 });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Development", builder =>
-                builder
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowAnyOrigin()
-                );
+    options.AddPolicy("AllowAngular", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200") 
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddScoped<IUsuarioServices, UsuarioService>();
@@ -41,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngular");
 
 app.UseAuthorization();
 
