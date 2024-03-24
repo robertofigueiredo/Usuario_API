@@ -8,15 +8,15 @@ namespace Data.Mapping
         public static void Map(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>()
-                .ToTable("Usuarios");
+                .ToTable("Usuario");
 
             modelBuilder.Entity<Usuario>()
                 .HasKey(x => x.Id);
 
             modelBuilder.Entity<Usuario>()
-               .Property(x => x.Id)
-               .HasColumnName("Id")
-               .ValueGeneratedNever();
+                .Property(x => x.Id)
+                .HasColumnName("Id")
+                .UseIdentityColumn();
 
             modelBuilder.Entity<Usuario>()
                 .Property(x => x.Nome)
