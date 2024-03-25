@@ -5,10 +5,10 @@ namespace Services.Interfaces
 {
     public interface IUsuarioServices
     {
-        Usuario BuscaUsuarioId(int id);
+        ServiceResponse<Usuario> BuscaUsuarioPorId(int id);
         ServiceResponse<List<Usuario>> BuscaUsuarioAll();
         BaseRetorno DeletaUsuario(int id);
         BaseRetorno IncluirUsuario(UsuarioAPIViewModel usuario);
-        BaseRetorno AtualizaUsuario(UsuarioAPIViewModel usuario);
+        ServiceResponse<Usuario> AtualizaUsuario(UsuarioAPIViewModel usuario);
     }
 }

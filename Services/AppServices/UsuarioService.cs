@@ -3,6 +3,7 @@ using Domain.Models;
 using Services.Interfaces;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata;
 using Usuario_API.Models;
 
 namespace Services.AppServices
@@ -15,22 +16,37 @@ namespace Services.AppServices
         {
             _usuarioRepository = usuarioRepository;
         }
-        public Usuario BuscaUsuarioId(int id)
+
+        public ServiceResponse<Usuario> BuscaUsuarioPorId(int id)
         {
+            ServiceResponse<Usuario> serviceResponse = new ServiceResponse<Usuario>();
+
             if (id == 0)
             {
-                return null; 
+                serviceResponse.Mensagem = "Id não pode ser 0";
+                serviceResponse.Sucesso = false;
+                return serviceResponse;
             }
 
             try
             {
-                return _usuarioRepository.BuscaUsuarioId(id);
+                var usuario = _usuarioRepository.BuscaUsuarioId(id);
+                if (usuario == null)
+                {
+                    serviceResponse.Mensagem = "Nenhum usuário foi localizado";
+                    serviceResponse.Sucesso = false;
+                    return serviceResponse;
+                }
 
+                serviceResponse.Dados = usuario;
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocorreu um erro ao buscar o usuário por ID.", ex);
+                serviceResponse.Mensagem = ex.Message;
+                serviceResponse.Sucesso = false;
             }
+
+            return serviceResponse;
         }
 
         public ServiceResponse<List<Usuario>> BuscaUsuarioAll()
@@ -123,17 +139,17 @@ namespace Services.AppServices
             
         }
 
-        public BaseRetorno AtualizaUsuario(UsuarioAPIViewModel usuario)
+        public ServiceResponse<Usuario> AtualizaUsuario(UsuarioAPIViewModel usuario)
         {
-            BaseRetorno retorno = new BaseRetorno();
+            ServiceResponse<Usuario> serviceResponse = new ServiceResponse<Usuario>();
             try
             {
                 var VerificaExiste = _usuarioRepository.BuscaUsuarioId(usuario.Id);
                 if(VerificaExiste == null)
                 {
-                    retorno.Validacao = false;
-                    retorno.MensagemResponse = "Usuário não encontrado";
-                    return retorno;
+                    serviceResponse.Sucesso = false;
+                    serviceResponse.Mensagem = "Usuário não encontrado";
+                    return serviceResponse;
                 }
                 VerificaExiste.Turno = usuario.Turno;
                 VerificaExiste.Departamento = usuario.Departamento;
@@ -145,21 +161,23 @@ namespace Services.AppServices
                 var UpdateRepository = _usuarioRepository.AtualizarUsuario(VerificaExiste);
                 if (!UpdateRepository.Validacao)
                 {
-                    retorno.MensagemResponse = UpdateRepository.MensagemResponse;
-                    retorno.Validacao = UpdateRepository.Validacao;
-                    return retorno;
+                    serviceResponse.Mensagem = UpdateRepository.MensagemResponse;
+                    serviceResponse.Sucesso = UpdateRepository.Validacao;
+                    return serviceResponse;
                 }
+                var NovoUsuario = _usuarioRepository.BuscaUsuarioId(usuario.Id);
 
-                retorno.MensagemResponse = "Usuário atualizado com sucesso!";
-                retorno.Validacao = true;
+                serviceResponse.Mensagem = "Usuário atualizado com sucesso!";
+                serviceResponse.Sucesso = true;
+                serviceResponse.Dados = NovoUsuario;
             }
             catch(Exception ex) 
             {
-                retorno.Validacao = false;
-                retorno.MensagemResponse = ex.Message;
+                serviceResponse.Sucesso = false;
+                serviceResponse.Mensagem = ex.Message;
             }
 
-            return retorno;
+            return serviceResponse;
         }
 
     }
