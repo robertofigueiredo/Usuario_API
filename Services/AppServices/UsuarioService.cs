@@ -109,34 +109,33 @@ namespace Services.AppServices
             return RetornoService;
         }
 
-        public BaseRetorno DeletaUsuario(int id)
+        public ServiceResponse<List<Usuario>> DeletaUsuario(int id)
         {
+            ServiceResponse<List<Usuario>> RetornoService =  new ServiceResponse<List<Usuario>>();
             try
             {
                 var usuario = _usuarioRepository.BuscaUsuarioId(id);
 
                 if (usuario == null)
                 {
-                    return new BaseRetorno
-                    {
-                        Validacao = false,
-                        MensagemResponse = "Usuário não encontrado!"
-                    };
+                    RetornoService.Sucesso = false;
+                    RetornoService.Mensagem = "Usuário não encontrado!";
+                    return RetornoService;
                 }
 
                 _usuarioRepository.Excluirusuario(usuario);
 
-                return new BaseRetorno
-                {
-                    Validacao = true,
-                    MensagemResponse = "Usuário excluído com sucesso"
-                };
+                RetornoService.Dados = _usuarioRepository.BuscaUsuarioAll().ToList();
+
+                RetornoService.Sucesso = true;
+                RetornoService.Mensagem = "Usuário excluído com sucesso";
             }
             catch(Exception ex)
             {
                 throw ex;
             }
-            
+
+            return RetornoService;
         }
 
         public ServiceResponse<Usuario> AtualizaUsuario(UsuarioAPIViewModel usuario)

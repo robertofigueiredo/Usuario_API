@@ -95,18 +95,13 @@ namespace Usuario_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult DeletarUsuario(int id)
+        public ActionResult<ServiceResponse<IEnumerable<UsuarioAPIViewModel>>> DeletarUsuario(int id)
         {
             try
             {
                 var resultado = _usuarioService.DeletaUsuario(id);
 
-                if (!resultado.Validacao)
-                {
-                    return BadRequest(resultado.MensagemResponse);
-                }
-
-                return NoContent();
+                return Ok(resultado);
             }
             catch(Exception ex)
             {

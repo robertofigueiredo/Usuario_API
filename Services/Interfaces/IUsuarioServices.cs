@@ -7,7 +7,7 @@ namespace Services.Interfaces
     {
         ServiceResponse<Usuario> BuscaUsuarioPorId(int id);
         ServiceResponse<List<Usuario>> BuscaUsuarioAll();
-        BaseRetorno DeletaUsuario(int id);
+        ServiceResponse<List<Usuario>> DeletaUsuario(int id);
         BaseRetorno IncluirUsuario(UsuarioAPIViewModel usuario);
         ServiceResponse<Usuario> AtualizaUsuario(UsuarioAPIViewModel usuario);
     }
