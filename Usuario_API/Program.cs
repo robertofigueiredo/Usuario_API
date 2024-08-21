@@ -16,6 +16,7 @@ builder.Services.AddControllers()
                 {
                     options.SuppressModelStateInvalidFilter = true;
                 });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", builder =>

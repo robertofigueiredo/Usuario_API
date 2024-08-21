@@ -1,9 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Services.Interfaces;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
 using Usuario_API.Models;
 
 namespace Services.AppServices
